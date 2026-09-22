@@ -1,1 +1,0 @@
-# LNPD-INTRANET
