@@ -1,538 +1,521 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aniimodle</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --valo-red: #ff4655;
-            --valo-dark: #111111;
-            --valo-gray: #1f2326;
-            --correct-green: #04b486;
-            --wrong-red: #d93d4a;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Aniimodle</title>
+<style>
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--valo-dark);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 0%, #2a1114 0%, #111111 60%);
-        }
+/* fait par moi :) */
 
-        /* Typography */
-        .title-neon {
-            color: var(--valo-red);
-            text-shadow: 0 0 10px rgba(255, 70, 85, 0.7), 0 0 30px rgba(255, 70, 85, 0.3);
-            letter-spacing: 4px;
-        }
+body {
+  background-color: #1a1a1a;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 10px;
+}
 
-        .uppercase-tracking {
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+h1 {
+  color: red;
+  font-size: 40px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
 
-        /* Buttons & Cards */
-        .valo-card {
-            background-color: var(--valo-gray);
-            border: 1px solid #333;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+#soustitre {
+  color: gray;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
 
-        .valo-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 4px; height: 100%;
-            background-color: transparent;
-            transition: all 0.3s ease;
-        }
+/* le menu avec les modes de jeu */
+.carte-mode {
+  background-color: #2b2b2b;
+  border: 2px solid #444;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px auto;
+  max-width: 400px;
+  cursor: pointer;
+}
 
-        .valo-card:hover {
-            border-color: var(--valo-red);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
+.carte-mode:hover {
+  border-color: red;
+  background-color: #333;
+}
 
-        .valo-card:hover::before {
-            background-color: var(--valo-red);
-        }
+.carte-mode h2 {
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+}
 
-        .btn-valo {
-            background-color: transparent;
-            border: 2px solid var(--valo-red);
-            color: var(--valo-red);
-            transition: all 0.2s ease;
-        }
+.carte-mode p {
+  color: #aaa;
+  font-size: 13px;
+  margin: 0;
+}
 
-        .btn-valo:hover {
-            background-color: var(--valo-red);
-            color: white;
-            box-shadow: 0 0 15px rgba(255, 70, 85, 0.5);
-        }
+#zone-jeu {
+  display: none;
+  max-width: 500px;
+  margin: 0 auto;
+}
 
-        /* Grid & Results */
-        .grid-cell {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0.75rem;
-            font-weight: 700;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            opacity: 0;
-            border: 2px solid transparent;
-        }
+#bouton-retour {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+#bouton-retour:hover {
+  color: white;
+}
 
-        .cell-correct { background-color: var(--correct-green); color: white; border-color: #06d6a0; }
-        .cell-wrong { background-color: var(--wrong-red); color: white; border-color: #ef476f; }
-        .cell-neutral { background-color: var(--valo-gray); color: white; border: 1px solid #444; }
+#boite-indice {
+  background-color: #2b2b2b;
+  border: 1px solid #555;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: none;
+}
 
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+#boite-indice p:first-child {
+  color: #999;
+  font-size: 12px;
+  text-transform: uppercase;
+}
 
-        /* Autocomplete */
-        .autocomplete-items {
-            position: absolute;
-            border: 1px solid #333;
-            border-top: none;
-            z-index: 99;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background-color: var(--valo-gray);
-            max-height: 250px;
-            overflow-y: auto;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
+#boite-indice p:last-child {
+  font-size: 20px;
+  font-weight: bold;
+}
 
-        .autocomplete-items div {
-            padding: 12px;
-            cursor: pointer;
-            border-bottom: 1px solid #333;
-            transition: background-color 0.2s;
-        }
+/* la barre pour taper le nom */
+input#champ-nom {
+  width: 90%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 2px solid #555;
+  background-color: #111;
+  color: white;
+  margin-bottom: 10px;
+}
 
-        .autocomplete-items div:hover {
-            background-color: var(--valo-red);
-            color: white;
-        }
+button#bouton-valider {
+  width: 95%;
+  padding: 12px;
+  background-color: red;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+button#bouton-valider:hover {
+  background-color: #cc0000;
+}
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--valo-dark); }
-        ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--valo-red); }
-    </style>
+#zone-autocomplete {
+  background-color: #2b2b2b;
+  border: 1px solid #555;
+  text-align: left;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+}
+#zone-autocomplete div {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #444;
+}
+#zone-autocomplete div:hover {
+  background-color: red;
+}
+
+#message-erreur {
+  color: red;
+  font-size: 13px;
+  height: 18px;
+  margin-bottom: 10px;
+}
+
+/* le tableau pour le mode classique */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+table th, table td {
+  border: 1px solid #444;
+  padding: 8px;
+  font-size: 12px;
+  text-align: center;
+  text-transform: uppercase;
+}
+table th {
+  color: #999;
+  border: none;
+}
+.ok {
+  background-color: green;
+}
+.pasok {
+  background-color: #7a1f1f;
+}
+.neutre {
+  background-color: #333;
+}
+
+.ligne-simple {
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#boite-fin {
+  display: none;
+  background-color: #2b2b2b;
+  border: 2px solid green;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+#boite-fin h3 {
+  color: lightgreen;
+  font-size: 26px;
+}
+
+</style>
 </head>
-<body class="flex flex-col items-center">
+<body>
 
-    <header class="w-full text-center py-8">
-        <h1 class="text-5xl md:text-6xl font-black title-neon uppercase-tracking">Aniimodle</h1>
-        <p class="text-gray-400 mt-2 tracking-widest text-sm uppercase">Testez vos connaissances sur l'univers d'Aniimo</p>
-    </header>
+<h1>Aniimodle</h1>
+<p id="soustitre">Teste tes connaissances sur l'univers d'Aniimo !</p>
 
-    <!-- MENU PRINCIPAL -->
-    <main id="menu-view" class="w-full max-w-5xl px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-10">
-        
-        <div class="valo-card p-6 cursor-pointer rounded-lg flex flex-col justify-center items-center text-center h-48" onclick="startGame('classique')">
-            <h2 class="text-2xl font-bold uppercase-tracking mb-2">Classique</h2>
-            <p class="text-xs text-gray-400 uppercase">Devinez avec des indices : Élément, Rôle, Stade, Région</p>
-        </div>
+<!-- MENU -->
+<div id="vue-menu">
+  <div class="carte-mode" onclick="lancerJeu('classique')">
+    <h2>Classique</h2>
+    <p>Devine avec des indices : Élément, Rôle, Stade, Région</p>
+  </div>
 
-        <div class="valo-card p-6 cursor-pointer rounded-lg flex flex-col justify-center items-center text-center h-48" onclick="startGame('forme')">
-            <h2 class="text-2xl font-bold uppercase-tracking mb-2">Forme</h2>
-            <p class="text-xs text-gray-400 uppercase">Devinez la créature selon sa forme alternative</p>
-        </div>
+  <div class="carte-mode" onclick="lancerJeu('forme')">
+    <h2>Forme</h2>
+    <p>Devine la créature selon sa forme alternative</p>
+  </div>
 
-        <div class="valo-card p-6 cursor-pointer rounded-lg flex flex-col justify-center items-center text-center h-48" onclick="startGame('capacite')">
-            <h2 class="text-2xl font-bold uppercase-tracking mb-2">Capacité</h2>
-            <p class="text-xs text-gray-400 uppercase">Trouvez l'Aniimo avec sa compétence de combat</p>
-        </div>
+  <div class="carte-mode" onclick="lancerJeu('capacite')">
+    <h2>Capacité</h2>
+    <p>Trouve l'Aniimo avec sa compétence de combat</p>
+  </div>
 
-        <div class="valo-card p-6 cursor-pointer rounded-lg flex flex-col justify-center items-center text-center h-48" onclick="startGame('emoji')">
-            <h2 class="text-2xl font-bold uppercase-tracking mb-2">Emoji</h2>
-            <p class="text-xs text-gray-400 uppercase">Déchiffrez les emojis pour trouver l'Aniimo</p>
-        </div>
+  <div class="carte-mode" onclick="lancerJeu('emoji')">
+    <h2>Emoji</h2>
+    <p>Déchiffre les emojis pour trouver l'Aniimo</p>
+  </div>
 
-        <div class="valo-card p-6 cursor-pointer rounded-lg flex flex-col justify-center items-center text-center h-48 md:col-span-2 lg:col-span-1" onclick="startGame('carte')">
-            <h2 class="text-2xl font-bold uppercase-tracking mb-2">Carte</h2>
-            <p class="text-xs text-gray-400 uppercase">Localisez l'Aniimo d'après son habitat sur Idyll</p>
-        </div>
-    </main>
+  <div class="carte-mode" onclick="lancerJeu('carte')">
+    <h2>Carte</h2>
+    <p>Localise l'Aniimo d'après son habitat sur Idyll</p>
+  </div>
+</div>
 
-    <!-- JEU -->
-    <main id="game-view" class="w-full max-w-4xl px-4 hidden flex-col items-center pb-10">
-        
-        <div class="w-full flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-            <button class="text-gray-400 hover:text-white transition uppercase text-sm font-bold flex items-center gap-2" onclick="showMenu()">
-                <span>&#8592;</span> Retour
-            </button>
-            <h2 id="current-mode-title" class="text-3xl font-black title-neon uppercase-tracking">MODE</h2>
-            <div class="w-20"></div> <!-- Spacer -->
-        </div>
+<!-- JEU -->
+<div id="zone-jeu">
+  <button id="bouton-retour" onclick="retourMenu()">&lt;- retour au menu</button>
+  <h2 id="titre-mode" style="color:red;">MODE</h2>
 
-        <!-- Hint Box -->
-        <div id="hint-box" class="w-full bg-[#1f2326] border border-gray-700 rounded-lg p-8 mb-8 text-center hidden shadow-lg">
-            <!-- Content injected via JS -->
-        </div>
+  <div id="boite-indice">
+    <p></p>
+    <p></p>
+  </div>
 
-        <!-- Input Area -->
-        <div id="input-area" class="w-full max-w-md relative mb-8 flex flex-col gap-4">
-            <div class="relative w-full">
-                <input type="text" id="aniimo-input" placeholder="Taper le nom d'un Aniimo..." autocomplete="off"
-                    class="w-full bg-[#1a1c1e] border-2 border-gray-700 text-white p-4 rounded-lg focus:outline-none focus:border-[#ff4655] transition text-lg font-bold">
-                <div id="autocomplete-list" class="autocomplete-items hidden"></div>
-            </div>
-            <button id="submit-btn" class="w-full btn-valo py-3 font-bold uppercase-tracking rounded-lg text-lg" onclick="submitGuess()">Envoyer</button>
-        </div>
+  <div id="zone-input">
+    <input type="text" id="champ-nom" placeholder="Tape le nom d'un Aniimo..." autocomplete="off">
+    <div id="zone-autocomplete"></div>
+    <button id="bouton-valider" onclick="validerReponse()">Envoyer</button>
+  </div>
 
-        <!-- Error Message -->
-        <div id="error-message" class="text-[#ff4655] font-bold h-6 mb-4"></div>
+  <div id="message-erreur"></div>
 
-        <!-- Results Grid -->
-        <div id="results-container" class="w-full flex flex-col gap-3">
-            <!-- Rempli dynamiquement -->
-        </div>
+  <div id="zone-resultats"></div>
 
-        <!-- End Game Box -->
-        <div id="end-game-box" class="w-full bg-[#1f2326] border border-[#ff4655] rounded-lg p-8 mt-8 text-center hidden flex-col items-center gap-4 shadow-[0_0_20px_rgba(255,70,85,0.2)]">
-            <h3 class="text-3xl font-black text-white uppercase-tracking" id="end-title">VICTOIRE</h3>
-            <p class="text-xl text-gray-300" id="end-desc"></p>
-            <button class="btn-valo px-8 py-3 font-bold uppercase-tracking rounded-lg mt-4" onclick="startGame(currentMode)">Rejouer ce mode</button>
-        </div>
+  <div id="boite-fin">
+    <h3>VICTOIRE !</h3>
+    <p id="texte-fin"></p>
+    <button id="bouton-valider" style="margin-top:10px;" onclick="lancerJeu(modeActuel)">Rejouer</button>
+  </div>
+</div>
 
-    </main>
+<script>
 
-    <script>
-        const aniimoDB = [
-            { nom: "Helion", element: "Lumière", role: "DPS", stade: "Nova", region: "Montagnes Solaires", 
-              formeDesc: "Prismana (Ses plumes dorées scintillent de mille feux)", 
-              capacite: "Rayon aveuglant qui étourdit l'adversaire", 
-              emojis: "☀️🦅✨", habitat: "Sommet du Mont Hélio" },
-              
-            { nom: "Loufeuteau", element: "Feu", role: "Breaker", stade: "Lumin", region: "Plaines Arides", 
-              formeDesc: "Highland (Fourrure très épaisse, cornes allongées et rousses)", 
-              capacite: "Morsure enflammée qui brise la jauge de Break", 
-              emojis: "🐺🔥🦷", habitat: "Terres de Cendres" },
-              
-            { nom: "Givrotus", element: "Glace", role: "Support", stade: "Gamma", region: "Toundra", 
-              formeDesc: "Umbrabow (Carapace sombre glaciale absorbant la lumière)", 
-              capacite: "Crée un bouclier de givre impénétrable pour l'équipe", 
-              emojis: "❄️🐢🛡️", habitat: "Lacs Gelés d'Eternia" },
-              
-            { nom: "Trombec", element: "Vent", role: "DPS", stade: "Lumin", region: "Nimbus Fields", 
-              formeDesc: "Prismana (Ailes aux reflets arc-en-ciel)", 
-              capacite: "Génère des tornades violentes qui repoussent les ennemis", 
-              emojis: "🐦🌪️💨", habitat: "Hauteurs des Nimbus Fields" },
-              
-            { nom: "Stellarys", element: "Lumière", role: "Regen", stade: "Nova", region: "Tideblossom Coast", 
-              formeDesc: "Umbrabow (Pelage étoilé corrompu par le vide cosmique)", 
-              capacite: "Soigne les alliés progressivement en fonction du cycle lunaire", 
-              emojis: "⭐🦊🌙", habitat: "Sanctuaire Astral" },
-              
-            { nom: "Nutrion", element: "Plante", role: "Healer", stade: "Gamma", region: "Forêt d'Émeraude", 
-              formeDesc: "Highland (Graines géantes poussant sur son dos)", 
-              capacite: "Distribue des baies curatives restaurant la santé et l'endurance", 
-              emojis: "🐿️🌰🌱", habitat: "Bosquet Ancestral" },
-              
-            { nom: "Coraliz", element: "Eau", role: "Support", stade: "Gamma", region: "Tideblossom Coast", 
-              formeDesc: "Prismana (Coraux phosphorescents multicolores sur le corps)", 
-              capacite: "Invoque un geyser purificateur dissipant les malus", 
-              emojis: "🐠🌊🪸", habitat: "Récif de Tideblossom" },
-              
-            { nom: "Fulmi", element: "Électrique", role: "DPS", stade: "Lumin", region: "Nimbus Fields", 
-              formeDesc: "Highland (Nuage orageux perpétuel autour du cou)", 
-              capacite: "Lance une chaîne d'éclairs frappant jusqu'à 3 cibles successives", 
-              emojis: "⚡🐭🌩️", habitat: "Plaines Foudroyées" },
-              
-            { nom: "Geoclaw", element: "Terre", role: "Breaker", stade: "Nova", region: "Cavernes d'Idyll", 
-              formeDesc: "Umbrabow (Griffes acérées en obsidienne pure)", 
-              capacite: "Frappe sismique détruisant l'armure et la garde de l'ennemi", 
-              emojis: "🐻🪨🐾", habitat: "Mines de Cristal" },
-              
-            { nom: "Lainirique", element: "Ténèbres", role: "Regen", stade: "Lumin", region: "Bois Chuchotants", 
-              formeDesc: "Umbrabow (Laine noire dense qui absorbe la lumière environnante)", 
-              capacite: "Endort les ennemis et draine lentement leur santé", 
-              emojis: "🐑💤🌑", habitat: "Vallon des Rêves" },
-              
-            { nom: "Aquarion", element: "Eau", role: "DPS", stade: "Nova", region: "Océan Profond", 
-              formeDesc: "Prismana (Nageoires translucides aux éclats multicolores)", 
-              capacite: "Provoque un Tsunami submergeant entièrement le champ de bataille", 
-              emojis: "🐋🌊🔱", habitat: "Abysses d'Idyll" },
-              
-            { nom: "Pyrolion", element: "Feu", role: "DPS", stade: "Nova", region: "Volcan Ignis", 
-              formeDesc: "Highland (Crinière imposante constituée de magma solide)", 
-              capacite: "Pousse un rugissement de flammes dévastateur réduisant l'attaque ennemie", 
-              emojis: "🦁🔥👑", habitat: "Cratère d'Ignis" },
-              
-            { nom: "Sylvère", element: "Plante", role: "Support", stade: "Nova", region: "Forêt d'Émeraude", 
-              formeDesc: "Prismana (Ramures fleuries composées de cristaux de sève)", 
-              capacite: "Enracine les ennemis sur place pour les empêcher d'esquiver", 
-              emojis: "🦌🌳✨", habitat: "Cœur de la Forêt" },
-              
-            { nom: "Ombrage", element: "Ténèbres", role: "Breaker", stade: "Gamma", region: "Terres Désolées", 
-              formeDesc: "Umbrabow (Silhouette vaporeuse totalement insaisissable)", 
-              capacite: "Attaque furtive ignorant totalement la défense physique", 
-              emojis: "🐈‍⬛🔪👻", habitat: "Ruines Oubliées" },
-              
-            { nom: "Aéroplume", element: "Vent", role: "Healer", stade: "Gamma", region: "Montagnes Solaires", 
-              formeDesc: "Highland (Plumes exceptionnellement longues, duveteuses et chaudes)", 
-              capacite: "Souffle une brise revigorante soignant une altération d'état au hasard", 
-              emojis: "🕊️🍃💖", habitat: "Hauts Plateaux" }
-        ];
+// la base de donnée avec tous les aniimos, jai pas touché a ca
+var aniimoDB = [
+  { nom: "Helion", element: "Lumière", role: "DPS", stade: "Nova", region: "Montagnes Solaires",
+    formeDesc: "Prismana (Ses plumes dorées scintillent de mille feux)",
+    capacite: "Rayon aveuglant qui étourdit l'adversaire",
+    emojis: "☀️🦅✨", habitat: "Sommet du Mont Hélio" },
 
-        let currentMode = '';
-        let targetAniimo = null;
-        let isGameOver = false;
+  { nom: "Loufeuteau", element: "Feu", role: "Breaker", stade: "Lumin", region: "Plaines Arides",
+    formeDesc: "Highland (Fourrure très épaisse, cornes allongées et rousses)",
+    capacite: "Morsure enflammée qui brise la jauge de Break",
+    emojis: "🐺🔥🦷", habitat: "Terres de Cendres" },
 
-        const menuView = document.getElementById('menu-view');
-        const gameView = document.getElementById('game-view');
-        const modeTitleDisplay = document.getElementById('current-mode-title');
-        const hintBox = document.getElementById('hint-box');
-        const inputArea = document.getElementById('input-area');
-        const guessInput = document.getElementById('aniimo-input');
-        const autocompleteList = document.getElementById('autocomplete-list');
-        const resultsContainer = document.getElementById('results-container');
-        const errorMessage = document.getElementById('error-message');
-        const endGameBox = document.getElementById('end-game-box');
-        const endTitle = document.getElementById('end-title');
-        const endDesc = document.getElementById('end-desc');
-        const submitBtn = document.getElementById('submit-btn');
+  { nom: "Givrotus", element: "Glace", role: "Support", stade: "Gamma", region: "Toundra",
+    formeDesc: "Umbrabow (Carapace sombre glaciale absorbant la lumière)",
+    capacite: "Crée un bouclier de givre impénétrable pour l'équipe",
+    emojis: "❄️🐢🛡️", habitat: "Lacs Gelés d'Eternia" },
 
-        function showMenu() {
-            gameView.classList.add('hidden');
-            gameView.classList.remove('flex');
-            menuView.classList.remove('hidden');
-            menuView.classList.add('grid');
-            currentMode = '';
-        }
+  { nom: "Trombec", element: "Vent", role: "DPS", stade: "Lumin", region: "Nimbus Fields",
+    formeDesc: "Prismana (Ailes aux reflets arc-en-ciel)",
+    capacite: "Génère des tornades violentes qui repoussent les ennemis",
+    emojis: "🐦🌪️💨", habitat: "Hauteurs des Nimbus Fields" },
 
-        function startGame(mode) {
-            currentMode = mode;
-            menuView.classList.add('hidden');
-            menuView.classList.remove('grid');
-            gameView.classList.remove('hidden');
-            gameView.classList.add('flex');
-            
-            resetGameState();
-            setupModeUI();
-        }
+  { nom: "Stellarys", element: "Lumière", role: "Regen", stade: "Nova", region: "Tideblossom Coast",
+    formeDesc: "Umbrabow (Pelage étoilé corrompu par le vide cosmique)",
+    capacite: "Soigne les alliés progressivement en fonction du cycle lunaire",
+    emojis: "⭐🦊🌙", habitat: "Sanctuaire Astral" },
 
-        function resetGameState() {
-            isGameOver = false;
-            guessInput.value = '';
-            guessInput.disabled = false;
-            submitBtn.disabled = false;
-            errorMessage.innerText = '';
-            resultsContainer.innerHTML = '';
-            endGameBox.classList.add('hidden');
-            endGameBox.classList.remove('flex');
-            inputArea.classList.remove('hidden');
-            inputArea.classList.add('flex');
+  { nom: "Nutrion", element: "Plante", role: "Healer", stade: "Gamma", region: "Forêt d'Émeraude",
+    formeDesc: "Highland (Graines géantes poussant sur son dos)",
+    capacite: "Distribue des baies curatives restaurant la santé et l'endurance",
+    emojis: "🐿️🌰🌱", habitat: "Bosquet Ancestral" },
 
-            // Select random target
-            targetAniimo = aniimoDB[Math.floor(Math.random() * aniimoDB.length)];
-            
-            // Debug: console.log("Cible :", targetAniimo.nom);
-        }
+  { nom: "Coraliz", element: "Eau", role: "Support", stade: "Gamma", region: "Tideblossom Coast",
+    formeDesc: "Prismana (Coraux phosphorescents multicolores sur le corps)",
+    capacite: "Invoque un geyser purificateur dissipant les malus",
+    emojis: "🐠🌊🪸", habitat: "Récif de Tideblossom" },
 
-        function setupModeUI() {
-            modeTitleDisplay.innerText = currentMode;
-            hintBox.classList.remove('hidden');
-            hintBox.innerHTML = '';
+  { nom: "Fulmi", element: "Électrique", role: "DPS", stade: "Lumin", region: "Nimbus Fields",
+    formeDesc: "Highland (Nuage orageux perpétuel autour du cou)",
+    capacite: "Lance une chaîne d'éclairs frappant jusqu'à 3 cibles successives",
+    emojis: "⚡🐭🌩️", habitat: "Plaines Foudroyées" },
 
-            if (currentMode === 'classique') {
-                hintBox.classList.add('hidden'); // No hint
-                // Setup Header Grid
-                resultsContainer.innerHTML = `
-                    <div class="grid grid-cols-5 gap-2 mb-2 border-b border-gray-700 pb-2">
-                        <div class="text-[10px] md:text-xs text-gray-400 text-center uppercase tracking-widest font-bold">Aniimo</div>
-                        <div class="text-[10px] md:text-xs text-gray-400 text-center uppercase tracking-widest font-bold">Élément</div>
-                        <div class="text-[10px] md:text-xs text-gray-400 text-center uppercase tracking-widest font-bold">Rôle</div>
-                        <div class="text-[10px] md:text-xs text-gray-400 text-center uppercase tracking-widest font-bold">Stade</div>
-                        <div class="text-[10px] md:text-xs text-gray-400 text-center uppercase tracking-widest font-bold">Région</div>
-                    </div>
-                `;
-            } 
-            else if (currentMode === 'forme') {
-                hintBox.innerHTML = `
-                    <p class="text-gray-400 uppercase text-sm mb-2">Description de la forme :</p>
-                    <p class="text-xl md:text-2xl font-bold text-white">"${targetAniimo.formeDesc}"</p>
-                `;
-            } 
-            else if (currentMode === 'capacite') {
-                hintBox.innerHTML = `
-                    <p class="text-gray-400 uppercase text-sm mb-2">Compétence de combat :</p>
-                    <p class="text-xl md:text-2xl font-bold text-[#ff4655] italic">"${targetAniimo.capacite}"</p>
-                `;
-            } 
-            else if (currentMode === 'emoji') {
-                hintBox.innerHTML = `
-                    <p class="text-gray-400 uppercase text-sm mb-4">Suite d'emojis :</p>
-                    <p class="text-5xl md:text-6xl tracking-[1rem]">${targetAniimo.emojis}</p>
-                `;
-            } 
-            else if (currentMode === 'carte') {
-                hintBox.innerHTML = `
-                    <p class="text-gray-400 uppercase text-sm mb-2">Habitat (Région d'Idyll) :</p>
-                    <p class="text-xl md:text-2xl font-bold text-[#04b486]">📍 ${targetAniimo.habitat}</p>
-                `;
-            }
-        }
+  { nom: "Geoclaw", element: "Terre", role: "Breaker", stade: "Nova", region: "Cavernes d'Idyll",
+    formeDesc: "Umbrabow (Griffes acérées en obsidienne pure)",
+    capacite: "Frappe sismique détruisant l'armure et la garde de l'ennemi",
+    emojis: "🐻🪨🐾", habitat: "Mines de Cristal" },
 
-        guessInput.addEventListener('input', function() {
-            const val = this.value;
-            closeAutocomplete();
-            if (!val) return false;
+  { nom: "Lainirique", element: "Ténèbres", role: "Regen", stade: "Lumin", region: "Bois Chuchotants",
+    formeDesc: "Umbrabow (Laine noire dense qui absorbe la lumière environnante)",
+    capacite: "Endort les ennemis et draine lentement leur santé",
+    emojis: "🐑💤🌑", habitat: "Vallon des Rêves" },
 
-            autocompleteList.classList.remove('hidden');
-            let hasMatches = false;
+  { nom: "Aquarion", element: "Eau", role: "DPS", stade: "Nova", region: "Océan Profond",
+    formeDesc: "Prismana (Nageoires translucides aux éclats multicolores)",
+    capacite: "Provoque un Tsunami submergeant entièrement le champ de bataille",
+    emojis: "🐋🌊🔱", habitat: "Abysses d'Idyll" },
 
-            // Sort alphabetically for consistency
-            const sortedDB = [...aniimoDB].sort((a, b) => a.nom.localeCompare(b.nom));
+  { nom: "Pyrolion", element: "Feu", role: "DPS", stade: "Nova", region: "Volcan Ignis",
+    formeDesc: "Highland (Crinière imposante constituée de magma solide)",
+    capacite: "Pousse un rugissement de flammes dévastateur réduisant l'attaque ennemie",
+    emojis: "🦁🔥👑", habitat: "Cratère d'Ignis" },
 
-            sortedDB.forEach(aniimo => {
-                if (aniimo.nom.toUpperCase().includes(val.toUpperCase())) {
-                    hasMatches = true;
-                    const item = document.createElement('div');
-                    
-                    // Highlight matching part
-                    const regex = new RegExp(`(${val})`, "gi");
-                    const highlightedName = aniimo.nom.replace(regex, "<span class='text-[#ff4655] font-black'>$1</span>");
-                    
-                    item.innerHTML = `<span class="font-bold text-white">${highlightedName}</span>`;
-                    item.innerHTML += `<input type='hidden' value='${aniimo.nom}'>`;
-                    
-                    item.addEventListener('click', function() {
-                        guessInput.value = this.getElementsByTagName('input')[0].value;
-                        closeAutocomplete();
-                        submitGuess();
-                    });
-                    autocompleteList.appendChild(item);
-                }
-            });
+  { nom: "Sylvère", element: "Plante", role: "Support", stade: "Nova", region: "Forêt d'Émeraude",
+    formeDesc: "Prismana (Ramures fleuries composées de cristaux de sève)",
+    capacite: "Enracine les ennemis sur place pour les empêcher d'esquiver",
+    emojis: "🦌🌳✨", habitat: "Cœur de la Forêt" },
 
-            if (!hasMatches) closeAutocomplete();
-        });
+  { nom: "Ombrage", element: "Ténèbres", role: "Breaker", stade: "Gamma", region: "Terres Désolées",
+    formeDesc: "Umbrabow (Silhouette vaporeuse totalement insaisissable)",
+    capacite: "Attaque furtive ignorant totalement la défense physique",
+    emojis: "🐈‍⬛🔪👻", habitat: "Ruines Oubliées" },
 
-        function closeAutocomplete() {
-            autocompleteList.innerHTML = '';
-            autocompleteList.classList.add('hidden');
-        }
+  { nom: "Aéroplume", element: "Vent", role: "Healer", stade: "Gamma", region: "Montagnes Solaires",
+    formeDesc: "Highland (Plumes exceptionnellement longues, duveteuses et chaudes)",
+    capacite: "Souffle une brise revigorante soignant une altération d'état au hasard",
+    emojis: "🕊️🍃💖", habitat: "Hauts Plateaux" }
+];
 
-        document.addEventListener('click', function (e) {
-            if (e.target !== guessInput) closeAutocomplete();
-        });
+var modeActuel = "";
+var cible = null;
+var partieFinie = false;
 
-        guessInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                closeAutocomplete();
-                submitGuess();
-            }
-        });
+function retourMenu() {
+  document.getElementById("zone-jeu").style.display = "none";
+  document.getElementById("vue-menu").style.display = "block";
+  modeActuel = "";
+}
 
-        function submitGuess() {
-            if (isGameOver) return;
-            
-            const guessedName = guessInput.value.trim();
-            if (!guessedName) return;
+function lancerJeu(mode) {
+  modeActuel = mode;
+  document.getElementById("vue-menu").style.display = "none";
+  document.getElementById("zone-jeu").style.display = "block";
 
-            const guessedAniimo = aniimoDB.find(a => a.nom.toLowerCase() === guessedName.toLowerCase());
+  // reset des trucs
+  partieFinie = false;
+  document.getElementById("champ-nom").value = "";
+  document.getElementById("champ-nom").disabled = false;
+  document.getElementById("message-erreur").innerHTML = "";
+  document.getElementById("zone-resultats").innerHTML = "";
+  document.getElementById("boite-fin").style.display = "none";
+  document.getElementById("zone-input").style.display = "block";
 
-            if (!guessedAniimo) {
-                errorMessage.innerText = "Aniimo inconnu. Vérifiez l'orthographe ou utilisez la liste.";
-                return;
-            }
+  // on choisit un aniimo au hasard
+  var nb = Math.floor(Math.random() * aniimoDB.length);
+  cible = aniimoDB[nb];
+  // console.log("triche : " + cible.nom);
 
-            errorMessage.innerText = "";
-            guessInput.value = "";
+  document.getElementById("titre-mode").innerHTML = mode;
 
-            evaluateGuess(guessedAniimo);
-        }
+  var boiteIndice = document.getElementById("boite-indice");
+  var p = boiteIndice.getElementsByTagName("p");
 
-        function evaluateGuess(guessed) {
-            const isCorrect = (guessed.nom === targetAniimo.nom);
+  if (mode == "classique") {
+    boiteIndice.style.display = "none";
+    document.getElementById("zone-resultats").innerHTML =
+      "<table><tr><th>Aniimo</th><th>Élément</th><th>Rôle</th><th>Stade</th><th>Région</th></tr></table>";
+  }
+  else if (mode == "forme") {
+    boiteIndice.style.display = "block";
+    p[0].innerHTML = "Description de la forme :";
+    p[1].innerHTML = '"' + cible.formeDesc + '"';
+  }
+  else if (mode == "capacite") {
+    boiteIndice.style.display = "block";
+    p[0].innerHTML = "Compétence de combat :";
+    p[1].innerHTML = '"' + cible.capacite + '"';
+  }
+  else if (mode == "emoji") {
+    boiteIndice.style.display = "block";
+    p[0].innerHTML = "Suite d'emojis :";
+    p[1].innerHTML = "<span style='font-size:40px;'>" + cible.emojis + "</span>";
+  }
+  else if (mode == "carte") {
+    boiteIndice.style.display = "block";
+    p[0].innerHTML = "Habitat (Région d'Idyll) :";
+    p[1].innerHTML = "📍 " + cible.habitat;
+  }
+}
 
-            if (currentMode === 'classique') {
-                renderClassiqueRow(guessed, isCorrect);
-            } else {
-                renderSimpleRow(guessed, isCorrect);
-            }
+// autocomplete tout simple
+document.getElementById("champ-nom").addEventListener("input", function() {
+  var val = this.value;
+  var zone = document.getElementById("zone-autocomplete");
+  zone.innerHTML = "";
 
-            if (isCorrect) {
-                handleWin();
-            }
-        }
+  if (val.length == 0) {
+    zone.style.display = "none";
+    return;
+  }
 
-        function renderClassiqueRow(guess, isCorrectTitle) {
-            const row = document.createElement('div');
-            row.className = 'grid grid-cols-5 gap-2 w-full';
+  zone.style.display = "block";
+  for (var i = 0; i < aniimoDB.length; i++) {
+    var nomAniimo = aniimoDB[i].nom;
+    if (nomAniimo.toUpperCase().indexOf(val.toUpperCase()) !== -1) {
+      var div = document.createElement("div");
+      div.innerHTML = nomAniimo;
+      div.onclick = function() {
+        document.getElementById("champ-nom").value = this.innerHTML;
+        document.getElementById("zone-autocomplete").style.display = "none";
+        validerReponse();
+      };
+      zone.appendChild(div);
+    }
+  }
+});
 
-            const createCell = (text, isMatch, delayIndex) => {
-                const div = document.createElement('div');
-                div.className = `grid-cell ${isMatch ? 'cell-correct' : 'cell-wrong'}`;
-                // Special style for Name column if wrong (neutral gray instead of bright red)
-                if (!isMatch && delayIndex === 0) {
-                    div.className = 'grid-cell cell-neutral';
-                }
-                div.innerText = text;
-                div.style.animationDelay = `${delayIndex * 0.15}s`;
-                return div;
-            };
+document.getElementById("champ-nom").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    document.getElementById("zone-autocomplete").style.display = "none";
+    validerReponse();
+  }
+});
 
-            row.appendChild(createCell(guess.nom, isCorrectTitle, 0));
-            row.appendChild(createCell(guess.element, guess.element === targetAniimo.element, 1));
-            row.appendChild(createCell(guess.role, guess.role === targetAniimo.role, 2));
-            row.appendChild(createCell(guess.stade, guess.stade === targetAniimo.stade, 3));
-            row.appendChild(createCell(guess.region, guess.region === targetAniimo.region, 4));
+document.addEventListener("click", function(e) {
+  if (e.target.id !== "champ-nom") {
+    document.getElementById("zone-autocomplete").style.display = "none";
+  }
+});
 
-            // Insert just after the header
-            resultsContainer.insertBefore(row, resultsContainer.children[1]);
-        }
+function validerReponse() {
+  if (partieFinie) return;
 
-        function renderSimpleRow(guess, isCorrect) {
-            const div = document.createElement('div');
-            div.className = `grid-cell w-full py-4 text-lg ${isCorrect ? 'cell-correct' : 'cell-wrong'}`;
-            if(!isCorrect) { div.classList.add('cell-neutral'); div.classList.remove('cell-wrong'); } // Use neutral for wrong in simple mode
-            div.innerText = guess.nom;
-            
-            resultsContainer.insertBefore(div, resultsContainer.firstChild);
-        }
+  var texte = document.getElementById("champ-nom").value.trim();
+  if (texte == "") return;
 
-        function handleWin() {
-            isGameOver = true;
-            guessInput.disabled = true;
-            submitBtn.disabled = true;
-            
-            // Hide input area cleanly
-            inputArea.classList.add('hidden');
-            inputArea.classList.remove('flex');
+  var trouve = null;
+  for (var i = 0; i < aniimoDB.length; i++) {
+    if (aniimoDB[i].nom.toLowerCase() == texte.toLowerCase()) {
+      trouve = aniimoDB[i];
+    }
+  }
 
-            // Show victory screen
-            setTimeout(() => {
-                endTitle.innerText = "VICTOIRE";
-                endTitle.classList.add('text-green-400');
-                endTitle.classList.remove('title-neon'); // Remove red neon
-                endDesc.innerHTML = `Bravo, c'était bien <strong>${targetAniimo.nom}</strong> !`;
-                
-                endGameBox.classList.remove('hidden');
-                endGameBox.classList.add('flex');
-            }, currentMode === 'classique' ? 1000 : 400); // Delay for Classic mode animation
-        }
+  if (trouve == null) {
+    document.getElementById("message-erreur").innerHTML = "Aniimo inconnu, vérifie l'orthographe !";
+    return;
+  }
 
-    </script>
+  document.getElementById("message-erreur").innerHTML = "";
+  document.getElementById("champ-nom").value = "";
+
+  var estBon = (trouve.nom == cible.nom);
+
+  if (modeActuel == "classique") {
+    ajouterLigneTableau(trouve, estBon);
+  } else {
+    ajouterLigneSimple(trouve, estBon);
+  }
+
+  if (estBon) {
+    finDuJeu();
+  }
+}
+
+function ajouterLigneTableau(guess, nomBon) {
+  var table = document.getElementById("zone-resultats").getElementsByTagName("table")[0];
+  var ligne = table.insertRow(1);
+
+  var c0 = ligne.insertCell(0);
+  c0.innerHTML = guess.nom;
+  c0.className = nomBon ? "ok" : "neutre";
+
+  var c1 = ligne.insertCell(1);
+  c1.innerHTML = guess.element;
+  c1.className = (guess.element == cible.element) ? "ok" : "pasok";
+
+  var c2 = ligne.insertCell(2);
+  c2.innerHTML = guess.role;
+  c2.className = (guess.role == cible.role) ? "ok" : "pasok";
+
+  var c3 = ligne.insertCell(3);
+  c3.innerHTML = guess.stade;
+  c3.className = (guess.stade == cible.stade) ? "ok" : "pasok";
+
+  var c4 = ligne.insertCell(4);
+  c4.innerHTML = guess.region;
+  c4.className = (guess.region == cible.region) ? "ok" : "pasok";
+}
+
+function ajouterLigneSimple(guess, estBon) {
+  var div = document.createElement("div");
+  div.className = "ligne-simple " + (estBon ? "ok" : "neutre");
+  div.innerHTML = guess.nom;
+  document.getElementById("zone-resultats").insertBefore(div, document.getElementById("zone-resultats").firstChild);
+}
+
+function finDuJeu() {
+  partieFinie = true;
+  document.getElementById("champ-nom").disabled = true;
+  document.getElementById("zone-input").style.display = "none";
+
+  setTimeout(function() {
+    document.getElementById("texte-fin").innerHTML = "Bravo, c'était bien <b>" + cible.nom + "</b> !";
+    document.getElementById("boite-fin").style.display = "block";
+  }, 300);
+}
+
+</script>
+
 </body>
 </html>
